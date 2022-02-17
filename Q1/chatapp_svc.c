@@ -20,7 +20,7 @@ static void
 chatapp_prog_1(struct svc_req *rqstp, register SVCXPRT *transp)
 {
 	union {
-		target chatapp_1_arg;
+		data chat_1_arg;
 	} argument;
 	char *result;
 	xdrproc_t _xdr_argument, _xdr_result;
@@ -31,10 +31,10 @@ chatapp_prog_1(struct svc_req *rqstp, register SVCXPRT *transp)
 		(void) svc_sendreply (transp, (xdrproc_t) xdr_void, (char *)NULL);
 		return;
 
-	case chatapp:
-		_xdr_argument = (xdrproc_t) xdr_target;
-		_xdr_result = (xdrproc_t) xdr_int;
-		local = (char *(*)(char *, struct svc_req *)) chatapp_1_svc;
+	case chat:
+		_xdr_argument = (xdrproc_t) xdr_data;
+		_xdr_result = (xdrproc_t) xdr_wrapstring;
+		local = (char *(*)(char *, struct svc_req *)) chat_1_svc;
 		break;
 
 	default:

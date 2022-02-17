@@ -6,42 +6,11 @@
 
 #include "chatapp.h"
 
-#include <netdb.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <sys/socket.h>
-
-#define MAX 80
-
-void func(int sockfd)
-{
-	char buff[MAX];
-	int n;
-	while (1)
-	{
-		bzero(buff, sizeof(buff));
-		printf("Enter the string : ");
-		n = 0;
-		while ((buff[n++] = getchar()) != '\n')
-			;
-		write(sockfd, buff, sizeof(buff));
-		bzero(buff, sizeof(buff));
-		read(sockfd, buff, sizeof(buff));
-		printf("From Server : %s", buff);
-		if ((strncmp(buff, "exit", 4)) == 0)
-		{
-			printf("Client Exit...\n");
-			break;
-		}
-	}
-}
-
-void chatapp_prog_1(char *host, char *IP, int PORT)
+void chatapp_prog_1(char *host, char *msg)
 {
 	CLIENT *clnt;
-	int *result_1;
-	target chatapp_1_arg;
+	char **result_1;
+	data chat_1_arg;
 
 #ifndef DEBUG
 	clnt = clnt_create(host, CHATAPP_PROG, CHATAPP_VERS, "udp");
@@ -52,25 +21,15 @@ void chatapp_prog_1(char *host, char *IP, int PORT)
 	}
 #endif /* DEBUG */
 
-	int sockfd;
-	chatapp_1_arg.ip = IP;
-	chatapp_1_arg.port = PORT;
-	sockfd = chatapp_1(&chatapp_1_arg, clnt);
-	if (sockfd == (int *)NULL)
+	chat_1_arg.msg = msg;
+	result_1 = chat_1(&chat_1_arg, clnt);
+	if (result_1 == (char **)NULL)
 	{
 		clnt_perror(clnt, "call failed");
 	}
-	else if (sockfd == -1)
-	{
-		printf("connection with the server failed...\n");
-	}
 	else
 	{
-		printf("connected to the server..\n");
-		// function for chat
-		func(sockfd);
-		// close the socket
-		close(sockfd);
+		printf("Server Response: %s\n", result_1);
 	}
 #ifndef DEBUG
 	clnt_destroy(clnt);
@@ -81,12 +40,12 @@ int main(int argc, char *argv[])
 {
 	char *host;
 
-	if (argc < 4)
+	if (argc < 3)
 	{
-		printf("usage: %s server_host IP PORT\n", argv[0]);
+		printf("usage: %s server_host message\n", argv[0]);
 		exit(1);
 	}
 	host = argv[1];
-	chatapp_prog_1(host, argv[2], atoi(argv[3]));
+	chatapp_prog_1(host, argv[2]);
 	exit(0);
 }

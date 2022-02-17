@@ -6,13 +6,11 @@
 #include "chatapp.h"
 
 bool_t
-xdr_target (XDR *xdrs, target *objp)
+xdr_data (XDR *xdrs, data *objp)
 {
 	register int32_t *buf;
 
-	 if (!xdr_string (xdrs, &objp->ip, ~0))
-		 return FALSE;
-	 if (!xdr_int (xdrs, &objp->port))
+	 if (!xdr_pointer (xdrs, (char **)&objp->msg, sizeof (char), (xdrproc_t) xdr_char))
 		 return FALSE;
 	return TRUE;
 }

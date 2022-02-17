@@ -6,54 +6,14 @@
 
 #include "chatapp.h"
 
-#include <stdio.h>
-#include <netdb.h>
-#include <netinet/in.h>
-#include <stdlib.h>
-#include <string.h>
-#include <sys/socket.h>
-#include <sys/types.h>
-#define MAX 80
-#define SA struct sockaddr
-
-int *chatapp_1_svc(target *argp, struct svc_req *rqstp)
+char **
+chat_1_svc(data *argp, struct svc_req *rqstp)
 {
-	static int result;
+	static char *result;
 
-	/*
-	 * insert server code here
-	 */
+	result = argp->msg;
 
-	int sockfd, connfd;
-	struct sockaddr_in servaddr, cli;
-
-	// socket create and verification
-	sockfd = socket(AF_INET, SOCK_STREAM, 0);
-	if (sockfd == -1)
-	{
-		printf("socket creation failed...\n");
-		exit(0);
-	}
-	else
-		printf("Socket successfully created..\n");
-	bzero(&servaddr, sizeof(servaddr));
-
-	// assign IP, PORT
-	servaddr.sin_family = AF_INET;
-	servaddr.sin_addr.s_addr = inet_addr(argp->ip);
-	servaddr.sin_port = htons(argp->port);
-
-	// connect the client socket to server socket
-	if (connect(sockfd, (SA *)&servaddr, sizeof(servaddr)) != 0)
-	{
-		printf("client connection with the server failed...\n");
-		result = -1;
-	}
-	else
-	{
-		printf("client connected to the server..\n");
-		result = sockfd;
-	}
+	printf("Client message: %s\n", result);
 
 	return &result;
 }
