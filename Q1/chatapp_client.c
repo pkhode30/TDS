@@ -29,7 +29,7 @@ void chatapp_prog_1(char *host, char *msg)
 	}
 	else
 	{
-		printf("Server Response: %s\n", result_1);
+		printf("Server Response: %s\n", *result_1);
 	}
 #ifndef DEBUG
 	clnt_destroy(clnt);
