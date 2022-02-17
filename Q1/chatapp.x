@@ -1,5 +1,5 @@
 struct data{
-    char* msg;
+    char msg[80];
 };
 
 program CHATAPP_PROG{

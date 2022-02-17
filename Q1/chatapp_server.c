@@ -10,10 +10,12 @@ char **
 chat_1_svc(data *argp, struct svc_req *rqstp)
 {
 	static char *result;
-
+	char msg[80];
 	result = argp->msg;
-
-	printf("Client message: %s\n", result);
-
-	return &argp->msg;
+	printf("Client: %s\n", result);
+	printf("Server: ");
+	gets(msg);
+	strcpy(argp->msg, msg);
+	result = argp->msg;
+	return &result;
 }

@@ -6,7 +6,7 @@
 
 #include "chatapp.h"
 
-void chatapp_prog_1(char *host, char *msg)
+void chatapp_prog_1(char *host)
 {
 	CLIENT *clnt;
 	char **result_1;
@@ -21,18 +21,30 @@ void chatapp_prog_1(char *host, char *msg)
 	}
 #endif /* DEBUG */
 
-	// chat_1_arg.msg = (char *)malloc(strlen(msg) + 1);
-	// strcpy(chat_1_arg.msg, msg);
-	chat_1_arg.msg = msg;
-	result_1 = chat_1(&chat_1_arg, clnt);
-	if (result_1 == (char **)NULL)
+	// chat_1_arg.msg = msg;
+
+	char msg[80];
+	while (1)
 	{
-		clnt_perror(clnt, "call failed");
+		printf("Client: ");
+		gets(msg);
+		if (strcmp(msg, "exit") == 0)
+		{
+			break;
+		}
+
+		strcpy(chat_1_arg.msg, msg);
+		result_1 = chat_1(&chat_1_arg, clnt);
+		if (result_1 == (char **)NULL)
+		{
+			clnt_perror(clnt, "call failed");
+		}
+		else
+		{
+			printf("Server: %s\n", *result_1);
+		}
 	}
-	else
-	{
-		printf("Server Response: %s\n", *result_1);
-	}
+
 #ifndef DEBUG
 	clnt_destroy(clnt);
 #endif /* DEBUG */
@@ -42,12 +54,14 @@ int main(int argc, char *argv[])
 {
 	char *host;
 
-	if (argc < 3)
+	if (argc < 2)
 	{
-		printf("usage: %s server_host message\n", argv[0]);
+		printf("usage: %s server_host\n", argv[0]);
 		exit(1);
 	}
+
 	host = argv[1];
-	chatapp_prog_1(host, argv[2]);
+	chatapp_prog_1(host);
+
 	exit(0);
 }

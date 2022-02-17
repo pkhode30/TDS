@@ -10,7 +10,9 @@ xdr_data (XDR *xdrs, data *objp)
 {
 	register int32_t *buf;
 
-	 if (!xdr_pointer (xdrs, (char **)&objp->msg, sizeof (char), (xdrproc_t) xdr_char))
+	int i;
+	 if (!xdr_vector (xdrs, (char *)objp->msg, 80,
+		sizeof (char), (xdrproc_t) xdr_char))
 		 return FALSE;
 	return TRUE;
 }
