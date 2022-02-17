@@ -15,5 +15,5 @@ chat_1_svc(data *argp, struct svc_req *rqstp)
 
 	printf("Client message: %s\n", result);
 
-	return &result;
+	return &argp->msg;
 }

@@ -21,6 +21,8 @@ void chatapp_prog_1(char *host, char *msg)
 	}
 #endif /* DEBUG */
 
+	// chat_1_arg.msg = (char *)malloc(strlen(msg) + 1);
+	// strcpy(chat_1_arg.msg, msg);
 	chat_1_arg.msg = msg;
 	result_1 = chat_1(&chat_1_arg, clnt);
 	if (result_1 == (char **)NULL)
